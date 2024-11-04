@@ -17,9 +17,10 @@ func InitHeavy() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Error opening sysdb")
 	}
+	SysDbConnection = sysDbConnection
 	log.Debug().Msg("Opening sysdb at " + SYS_DB_PATH)
-	ensureUserDB(sysDbConnection)
-	rows, err := sysDbConnection.Query("SELECT * FROM user_db")
+	ensureUserDB(SysDbConnection)
+	rows, err := SysDbConnection.Query("SELECT * FROM user_db")
 	if err != nil {
 		log.Fatal().Err(err).Msg("Error querying sysdb")
 	}
