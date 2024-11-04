@@ -1,4 +1,4 @@
-package main
+package settings
 
 const VERSION string = "1.0.0"
 const SERVER_PORT string = "3517"
