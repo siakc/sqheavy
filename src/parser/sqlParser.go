@@ -1,5 +1,5 @@
 // nolint: govet
-package main
+package parser
 
 import (
 	// "strings"
@@ -8,7 +8,6 @@ import (
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
-	
 )
 
 type Boolean bool
@@ -20,13 +19,13 @@ func (b *Boolean) Capture(values []string) error {
 
 type Sql struct {
 	CreateDatabase *CreateDatabase `("CREATE DATABASE" @@`
-	DropDatabase *DropDatabase ` | "DROP DATABASE" @@`
+	DropDatabase   *DropDatabase   ` | "DROP DATABASE" @@`
 	DetachDatabase *DetachDatabase ` | "DETACH DATABASE" @@`
-	Select *Select ` | "SELECT" @@`
-	Delete *Delete ` | "DELETE" @@`
-	Insert *Insert` | "INSERT" @@`
-	Update *Update` | "Update" @@`
-	Other []string ` | (@Ident | @Number | @String | @Operators )*)`
+	Select         *Select         ` | "SELECT" @@`
+	Delete         *Delete         ` | "DELETE" @@`
+	Insert         *Insert         ` | "INSERT" @@`
+	Update         *Update         ` | "Update" @@`
+	Other          []string        ` | (@Ident | @Number | @String | @Operators )*)`
 }
 
 type CreateDatabase struct {
@@ -71,7 +70,7 @@ var (
 	})
 	parser = participle.MustBuild[Sql](
 		participle.Lexer(sqlLexer),
-	//	participle.Unquote("String"),
+		//	participle.Unquote("String"),
 		participle.CaseInsensitive("Keyword"),
 	)
 )
