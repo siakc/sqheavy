@@ -6,12 +6,13 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"database/sql"
-	"github.com/gofiber/fiber/v3"
-	_ "github.com/mattn/go-sqlite3"
 	"os"
 	"sqheavy/db"
 	"sqheavy/parser"
 	. "sqheavy/settings"
+
+	"github.com/gofiber/fiber/v3"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type DbCommand struct {

@@ -1,6 +1,6 @@
 package settings
 
-const VERSION string = "1.0.0"
+const VERSION string = "0.1.0"
 const SERVER_PORT string = "3517"
 const SERVER_HOST string = ""
 const SYS_DB_PATH string = "../sys.db"
