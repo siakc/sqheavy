@@ -12,7 +12,8 @@ import (
 	. "sqheavy/settings"
 
 	"github.com/gofiber/fiber/v3"
-	_ "github.com/mattn/go-sqlite3"
+
+	"github.com/gofiber/fiber/v3/middleware/basicauth"
 )
 
 type DbCommand struct {
@@ -27,6 +28,18 @@ type DbCommandResponse struct {
 }
 
 func MountRoutes(app *fiber.App) {
+	//TODO: Use user_accounts in sysdb to authenticate users 
+	app.Use(basicauth.New(basicauth.Config{
+		Users: USER_ACCOUNTS,
+	}))
+
+	app.Use(func(c fiber.Ctx) error {
+
+		//TODO: Placeholder for middlewares
+
+		return c.Next()
+	})
+
 	app.Get("/", func(c fiber.Ctx) error {
 		// Send a string response to the client
 		return c.SendString("sqlheavy version " + VERSION)
@@ -43,6 +56,7 @@ func MountRoutes(app *fiber.App) {
 		if err := c.Bind().Body(dbCommand); err != nil {
 			return c.JSON(DbCommandResponse{"Failed", err.Error(), -1})
 		}
+		if !UserDbExists(dbCommand.DbName) {return c.JSON(DbCommandResponse{"Failed", "Invalid database", -1})}
 
 		q, err := parser.ParseSql(dbCommand.Command)
 		if err != nil {
@@ -163,4 +177,8 @@ func MountRoutes(app *fiber.App) {
 		return c.JSON(DbCommandResponse{"OK", "", -1})
 	})
 
+}
+
+func UserDbExists(dbName string) bool {
+	return db.UserDbConnections[dbName] != nil 
 }

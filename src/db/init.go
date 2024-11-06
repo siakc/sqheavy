@@ -20,6 +20,7 @@ func InitHeavy() {
 	SysDbConnection = sysDbConnection
 	log.Debug().Msg("Opening sysdb at " + SYS_DB_PATH)
 	ensureUserDB(SysDbConnection)
+	ensureAccounts(SysDbConnection)
 	rows, err := SysDbConnection.Query("SELECT * FROM user_db")
 	if err != nil {
 		log.Fatal().Err(err).Msg("Error querying sysdb")
@@ -43,10 +44,17 @@ func InitHeavy() {
 }
 
 func ensureUserDB(sysDbConnection *sql.DB) {
-	log.Debug().Msg("Initializing sysdb")
+	log.Debug().Msg("Initializing user_db")
 	_, err := sysDbConnection.Exec("CREATE TABLE IF NOT EXISTS user_db (name TEXT, path TEXT, options TEXT)")
 	if err != nil {
-		log.Fatal().Err(err).Msg("Error initializing sysdb")
+		log.Fatal().Err(err).Msg("Error initializing user_db")
 	}
-	log.Debug().Msg("Created user_db table")
+}
+
+func ensureAccounts(sysDbConnection *sql.DB) {
+	log.Debug().Msg("Initializing user_db")
+	_, err := sysDbConnection.Exec("CREATE TABLE IF NOT EXISTS user_accounts (name TEXT, password TEXT, scopes TEXT)")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error initializing user_db")
+	}
 }
